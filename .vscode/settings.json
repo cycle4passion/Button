@@ -1,0 +1,9 @@
+{
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+	"explorer.fileNesting.enabled": true,
+	"explorer.fileNesting.patterns": {
+		"*.svelte": "${capture}.test.ts, ${capture}.test.js, ${capture}.spec.ts, ${capture}.spec.js, ${capture}.stories.*"
+	}
+}

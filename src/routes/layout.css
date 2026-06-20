@@ -1,0 +1,61 @@
+@import 'tailwindcss';
+@import '@layerstack/tailwind/core.css';
+@import '@layerstack/tailwind/utils.css';
+@import '@layerstack/tailwind/themes/all.css';
+@import 'prismjs/themes/prism-tomorrow.css';
+
+/* Scan svelte-ux components for Tailwind classes (node_modules is ignored by default) */
+@source "../../node_modules/svelte-ux/dist";
+@source "../../src/lib/Components/Button.svelte";
+@source "../../src/lib/Components/OldButton.svelte";
+
+/*
+  Tailwind v4 defaults border-color to currentColor — restore svelte-ux / layerstack behavior.
+  https://next.svelte-ux.techniq.dev/docs/components/Button
+*/
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: color-mix(in oklab, var(--color-surface-content) 20%, transparent);
+		outline-color: color-mix(in oklab, var(--color-surface-content) 20%, transparent);
+	}
+}
+
+html {
+	@apply bg-surface-200 accent-primary;
+}
+
+main :is(h1, h2, h3):not(.prose *, .ApiDocs *) {
+	scroll-margin-top: calc(var(--headerHeight) + 1rem);
+}
+
+main h1:not(.prose *, .ApiDocs *) {
+	@apply mt-4 mb-2 border-b pb-1 text-xl font-semibold;
+}
+
+main h2:not(.prose *, .ApiDocs *) {
+	@apply mt-4 mb-1 text-lg font-semibold;
+}
+
+main h3:not(.prose *, .ApiDocs *) {
+	@apply mb-1 text-xs text-surface-content/50;
+}
+
+main :not(.prose) h2 + h3 {
+	@apply -mt-1;
+}
+
+pre[class*='language-'] {
+	@apply overflow-x-auto p-4 text-sm leading-relaxed;
+}
+
+:not(.dark) pre[class*='language-'] {
+	@apply bg-surface-content text-surface-100;
+}
+
+.dark pre[class*='language-'] {
+	@apply bg-surface-300;
+}
