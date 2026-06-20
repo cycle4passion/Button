@@ -32,6 +32,7 @@
 		};
 		class?: string;
 		style?: string;
+		ref?: HTMLAnchorElement | HTMLButtonElement | null;
 		children?: Snippet;
 	}
 
@@ -58,6 +59,7 @@
 		classes = {},
 		class: className = '',
 		style = '',
+		ref = $bindable(null),
 		children,
 		iconOnly = icon !== undefined && !children,
 		...restProps
@@ -207,6 +209,7 @@
 
 {#if href}
 	<a
+		bind:this={ref}
 		href={disabled ? undefined : href}
 		{target}
 		{...restProps as HTMLAnchorAttributes}
@@ -220,6 +223,7 @@
 	</a>
 {:else}
 	<button
+		bind:this={ref}
 		{type}
 		{...restProps as HTMLButtonAttributes}
 		class={_class}
