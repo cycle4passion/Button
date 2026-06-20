@@ -23,10 +23,8 @@
 <div class={cls('Code', 'rounded', 'overflow-auto', classes.root, $$props.class)}>
 	{#if source}
 		<div class="relative">
-			<pre class={cls(`language-${language} rounded`, classes.pre)} style="margin: 0;">
-				<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-				<code class={cls(`language-${language}`, classes.code)}>{@html highlighted}</code>
-			</pre>
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+			<pre class={cls(`language-${language} rounded`, classes.pre)} style="margin: 0;"><code class={cls(`language-${language}`, classes.code)}>{@html highlighted}</code></pre>
 		</div>
 	{/if}
 </div>
