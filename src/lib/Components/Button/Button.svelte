@@ -1,24 +1,27 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { cls } from '@layerstack/tailwind';
-	import { multi, type Attachments } from '$lib/attatchments/multi';
+	import { multi, type Attachments } from '$lib/attachments/multiAttachments';
 	import { Icon, ProgressCircle, getComponentSettings } from 'svelte-ux';
 	import { asIconData } from 'svelte-ux/utils/icons';
 	import { cva, compose, variantColorStyles } from '$lib/cva-helper';
 	import type { Snippet } from 'svelte';
 	import type { HTMLAnchorAttributes, HTMLButtonAttributes } from 'svelte/elements';
-	import type { ButtonColor, ButtonVariant, ButtonRounded, ButtonSize } from 'svelte-ux';
+	import type { ButtonColor, ButtonVariant, ButtonRounded, ButtonSize, IconData } from 'svelte-ux';
 
 	type IconInput = Parameters<typeof asIconData>[0];
+	type IconProps = Exclude<IconInput, IconData | null | undefined>;
 
-	interface Props {
-		type?: 'button' | 'submit' | 'reset';
-		href?: string | undefined;
-		target?: string | undefined;
+	/** Matches svelte-ux `asIconData` — full Icon props vs IconData (path, FA definition, etc.). */
+	function isIconComponentProps(icon: IconInput): icon is IconProps {
+		return typeof icon === 'object' && icon !== null && !Array.isArray(icon) && !('iconName' in icon);
+	}
+
+	type SharedProps = {
 		fullWidth?: boolean;
 		icon?: IconInput;
 		iconOnly?: boolean;
-		attachments?: Attachments<HTMLAnchorElement | HTMLButtonElement> | undefined;
+		attachments?: Attachments<HTMLAnchorElement | HTMLButtonElement>;
 		loading?: boolean;
 		disabled?: boolean;
 		rounded?: ButtonRounded | undefined;
@@ -32,9 +35,26 @@
 		};
 		class?: string;
 		style?: string;
-		ref?: HTMLAnchorElement | HTMLButtonElement | null;
 		children?: Snippet;
-	}
+	};
+
+	type HtmlProps<T> = Omit<T, keyof SharedProps | 'children'>;
+
+	type ButtonProps = SharedProps & {
+		href?: undefined;
+		target?: undefined;
+		type?: 'button' | 'submit' | 'reset';
+		ref?: HTMLButtonElement | null;
+	} & HtmlProps<Omit<HTMLButtonAttributes, 'href'>>;
+
+	type AnchorProps = SharedProps & {
+		href: string;
+		type?: never;
+		target?: string;
+		ref?: HTMLAnchorElement | null;
+	} & HtmlProps<Omit<HTMLAnchorAttributes, 'type'>>;
+
+	type Props = ButtonProps | AnchorProps;
 
 	type ButtonGroupContext = {
 		variant: ButtonVariant | undefined;
@@ -61,9 +81,9 @@
 		style = '',
 		ref = $bindable(null),
 		children,
-		iconOnly = icon !== undefined && !children,
+		iconOnly: iconOnlyProp = undefined,
 		...restProps
-	}: Props & (HTMLAnchorAttributes | HTMLButtonAttributes) = $props();
+	}: Props = $props();
 
 	// Every variant except `none`, which opts out of all layout/sizing/theming.
 	const STYLED_VARIANTS: ButtonVariant[] = [
@@ -152,6 +172,7 @@
 	// `compose` merges the structural and theming definitions into one component.
 	const button = compose(buttonBase, buttonColor);
 
+	const iconOnly = $derived(iconOnlyProp ?? (icon !== undefined && !children));
 	const _variant: ButtonVariant = $derived(
 		variant ?? groupContext?.variant ?? defaults.variant ?? 'default'
 	);
@@ -192,14 +213,13 @@
 		</span>
 	{:else if icon}
 		<span in:slide={{ axis: 'x', duration: 200 }}>
-			{#if typeof icon === 'string' || 'icon' in icon}
-				<!-- font path/url/etc or font-awesome IconDefinition -->
+			{#if isIconComponentProps(icon)}
+				<Icon class={cls('pointer-events-none', settingsClasses.icon, classes.icon)} {...icon} />
+			{:else}
 				<Icon
 					data={asIconData(icon)}
 					class={cls('pointer-events-none', settingsClasses.icon, classes.icon)}
 				/>
-			{:else}
-				<Icon class={cls('pointer-events-none', settingsClasses.icon, classes.icon)} {...icon} />
 			{/if}
 		</span>
 	{/if}

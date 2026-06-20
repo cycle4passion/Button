@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { createRawSnippet } from 'svelte';
-import Button from '$lib/Components/Button.svelte';
+import Button from '$lib/Components/Button/Button.svelte';
 
 /** A children snippet that renders some static text, for content assertions. */
 function label(text: string) {

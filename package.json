@@ -12,6 +12,7 @@
 		"test:watch": "vitest",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"tsc": "tsc",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},
@@ -36,7 +37,8 @@
 		"svelte": "^5.56.1",
 		"svelte-check": "^4.6.0",
 		"tailwindcss": "^4.3.0",
-		"typescript": "^6.0.3",
+		"typescript": "npm:@typescript/typescript6@^6.0.0",
+		"typescript-7": "npm:typescript@7.0.1-rc",
 		"typescript-eslint": "^8.60.1",
 		"vite": "^8.0.16",
 		"vitest": "^4.1.9",

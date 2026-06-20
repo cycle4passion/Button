@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest';
 import type { Attachment } from 'svelte/attachments';
-import { multi, type Attachments } from './multi';
+import { multi, type Attachments } from './multiAttachments';
 
 /** A real element to act as the attachment target. */
 function node() {
