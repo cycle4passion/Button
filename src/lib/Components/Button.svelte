@@ -2,18 +2,14 @@
 	import { slide } from 'svelte/transition';
 	import { cls } from '@layerstack/tailwind';
 	import { multi, type Attachments } from '$lib/attatchments/multi';
-	import type { Snippet } from 'svelte';
-	import type { HTMLAnchorAttributes, HTMLButtonAttributes } from 'svelte/elements';
-
 	import { Icon, ProgressCircle, getComponentSettings } from 'svelte-ux';
 	import { asIconData } from 'svelte-ux/utils/icons';
+	import { cva, compose, variantColorStyles } from '$lib/cva-helper';
+	import type { Snippet } from 'svelte';
+	import type { HTMLAnchorAttributes, HTMLButtonAttributes } from 'svelte/elements';
 	import type { ButtonColor, ButtonVariant, ButtonRounded, ButtonSize } from 'svelte-ux';
 
-	import { cva, compose, variantColorStyles } from '$lib/cva-helper';
-
 	type IconInput = Parameters<typeof asIconData>[0];
-
-	const { classes: settingsClasses, defaults } = getComponentSettings('Button');
 
 	interface Props {
 		type?: 'button' | 'submit' | 'reset';
@@ -76,6 +72,8 @@
 		'fill-light',
 		'text'
 	];
+
+	const { classes: settingsClasses, defaults } = getComponentSettings('Button');
 
 	// Override default from `ButtonGroup` if set (not used on docs page)
 	const groupContext = undefined as ButtonGroupContext | undefined;
